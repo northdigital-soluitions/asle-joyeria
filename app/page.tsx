@@ -296,7 +296,7 @@ function DesktopLayout() {
               <p className="text-[#d4c9a8] text-[9px] tracking-[0.35em] uppercase mb-3" style={{ fontFamily:"var(--font-body,sans-serif)" }}>Quiénes somos</p>
               <h3 className="text-white text-xl leading-tight mb-3" style={{ fontFamily:"var(--font-display,serif)", fontWeight:600 }}>Aslé Joyería</h3>
               <p className="text-[#a8bdd1] text-sm leading-relaxed" style={{ fontFamily:"var(--font-body,sans-serif)", fontWeight:300 }}>
-                Somos una joyería que desde <span className="text-[#d4c9a8] font-medium">2023</span> nos esforzamos por dar a nuestros clientes productos de la más alta calidad. Cada pieza es una historia, cada diseño refleja elegancia y cuidado artesanal.
+                Somos una joyería que desde <span className="text-[#d4c9a8] font-medium">2021</span> nos esforzamos por dar a nuestros clientes productos de la más alta calidad. Cada pieza es una historia, cada diseño refleja elegancia y cuidado artesanal.
               </p>
               <button onClick={() => setPanel(null)}
                 className="mt-5 text-[9px] tracking-[0.3em] uppercase text-[#d4c9a8]/60 hover:text-[#d4c9a8] transition-colors"
