@@ -32,7 +32,7 @@ const products: Product[] = [
   { id: 3, src: "/joya3.jpg", name: "Aretes gota de acero inoxidable",             price: "$299 MXN"                   },
 ];
 
-const WA_NUMBER = "522283145334";
+const WA_NUMBER = "522287775402";
 const IG_USER   = "asle_joyeria";
 
 function buildWaLink(name: string, price: string) {
