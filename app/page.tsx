@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -38,7 +37,7 @@ function buildWaLink(name: string, price: string) {
 }
 
 // ─── Panel Admin ───────────────────────────────────────────────────────────────
-const ADMIN_PASSWORD = "asle2024"; // ← cambia la contraseña aquí
+const ADMIN_PASSWORD = "asle2024";
 
 function AdminPanel({
   products,
@@ -102,7 +101,6 @@ function AdminPanel({
         }}
         className="bg-[#1a2e47] rounded-3xl overflow-hidden w-full max-w-md shadow-2xl border border-white/10"
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
           <div className="flex items-center gap-3">
             <span className="text-[#d4c9a8] text-lg">⚙</span>
@@ -123,10 +121,8 @@ function AdminPanel({
           </button>
         </div>
 
-        {/* Contenido */}
         <div className="px-6 py-6">
           {!unlocked ? (
-            // ── Pantalla de contraseña ──
             <div className="flex flex-col items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-[#d4c9a8]/10 flex items-center justify-center text-2xl text-[#d4c9a8]">
                 🔒
@@ -158,7 +154,6 @@ function AdminPanel({
               </button>
             </div>
           ) : (
-            // ── Panel de stock ──
             <div>
               <p className="text-[#a8bdd1] text-[11px] tracking-widest uppercase mb-4" style={{ fontFamily: "var(--font-body,sans-serif)" }}>
                 Control de stock — activa "Agotado" para ocultar el botón de compra
@@ -191,7 +186,6 @@ function AdminPanel({
                               </p>
                             </div>
                           </div>
-                          {/* Toggle */}
                           <button
                             onClick={() => onToggleSoldOut(p.id)}
                             className={`flex-shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-medium tracking-wider uppercase transition-all duration-200 ${
@@ -347,7 +341,6 @@ function ProductCard({ product, onDetail }: { product: Product; onDetail: () => 
       }`}
       style={{ opacity:visible?1:0, transform:visible?"translateY(0)":"translateY(32px)",
         transition:`opacity 0.6s ease ${product.id*80}ms, transform 0.6s cubic-bezier(0.34,1.2,0.64,1) ${product.id*80}ms, box-shadow 0.3s ease` }}>
-      {/* Badges */}
       {product.soldOut ? (
         <span className="absolute top-4 left-4 z-10 bg-[#c0392b] text-white text-xs px-3 py-1 rounded-full tracking-wider uppercase"
           style={{fontFamily:"var(--font-body,sans-serif)"}}>Agotado</span>
@@ -484,7 +477,6 @@ function CatalogSection({
         <h2 className="text-center text-4xl text-[#1f3a5f] mb-10"
           style={{fontFamily:"var(--font-display,serif)",fontWeight:600}}>Catálogo</h2>
 
-        {/* Tabs */}
         <div className="flex justify-center gap-2 mb-12 flex-wrap">
           {availableCats.map(cat => (
             <button key={cat} onClick={() => setActiveTab(cat)}
@@ -502,7 +494,6 @@ function CatalogSection({
           ))}
         </div>
 
-        {/* Grid */}
         {filtered.length > 0 ? (
           <div className="grid grid-cols-3 gap-8">
             {filtered.map(p=><ProductCard key={p.id} product={p} onDetail={()=>onDetail(p)}/>)}
@@ -518,7 +509,7 @@ function CatalogSection({
   );
 }
 
-// ─── Catálogo MÓVIL (acordeón de categorías) ──────────────────────────────────
+// ─── Catálogo MÓVIL ───────────────────────────────────────────────────────────
 function CatalogSectionMobile({
   catalogRef,
   products,
@@ -540,7 +531,6 @@ function CatalogSectionMobile({
         <h2 className="text-center text-3xl text-[#1f3a5f] mb-8"
           style={{fontFamily:"var(--font-display,serif)",fontWeight:600}}>Catálogo</h2>
 
-        {/* Tabs móvil */}
         <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
           {availableCats.map(cat => (
             <button key={cat} onClick={()=>setActiveTab(cat)}
@@ -587,7 +577,6 @@ function DesktopLayout({
   const scrollToCatalog = () => catalogRef.current?.scrollIntoView({ behavior:"smooth" });
   const togglePanel = (side: "about" | "ig") => setPanel(p => p === side ? null : side);
 
-  // Atajo de teclado Ctrl+H
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "h") { e.preventDefault(); setAdminOpen(v=>!v); }
@@ -614,7 +603,6 @@ function DesktopLayout({
       {selectedProduct && <ProductModal product={selectedProduct} onClose={()=>setSelectedProduct(null)}/>}
       {adminOpen && <AdminPanel products={products} onToggleSoldOut={onToggleSoldOut} onClose={()=>setAdminOpen(false)}/>}
 
-      {/* NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-8 py-4 bg-[#f5f1e8]/80 backdrop-blur-md border-b border-[#e0d9cc]">
         <a href="/" className="flex items-center">
           <Image src="/logo.png" alt="Aslé Joyería" width={56} height={56}/>
@@ -629,13 +617,11 @@ function DesktopLayout({
           style={{fontFamily:"var(--font-body,sans-serif)"}}>Ver catálogo</button>
       </nav>
 
-      {/* HERO */}
       <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-6 pt-20 overflow-hidden">
         <FloatingParticles/>
         <div className="absolute w-96 h-96 rounded-full bg-[#d4c9a8]/25 blur-3xl pointer-events-none"/>
 
         <div className="relative flex items-center justify-center w-full max-w-3xl">
-          {/* Panel IZQUIERDO */}
           <div className="absolute right-[calc(50%+60px)] overflow-hidden transition-all duration-700 ease-in-out"
             style={{width:panel==="about"?"240px":"0px",opacity:panel==="about"?1:0,pointerEvents:panel==="about"?"auto":"none"}}>
             <div className="bg-[#1f3a5f] rounded-2xl px-6 py-8 text-left shadow-2xl" style={{width:240}}>
@@ -650,7 +636,6 @@ function DesktopLayout({
             </div>
           </div>
 
-          {/* LOGO central */}
           <div className="relative z-10 transition-all duration-700 ease-in-out cursor-pointer select-none"
             style={{transform:panel==="about"?"translateX(80px)":panel==="ig"?"translateX(-80px)":"translateX(0px)"}}>
             <div className="relative group" onClick={()=>togglePanel("about")} title="Conoce nuestra historia">
@@ -670,7 +655,6 @@ function DesktopLayout({
             </button>
           </div>
 
-          {/* Panel DERECHO — Instagram */}
           <div className="absolute left-[calc(50%+60px)] overflow-hidden transition-all duration-700 ease-in-out"
             style={{width:panel==="ig"?"220px":"0px",opacity:panel==="ig"?1:0,pointerEvents:panel==="ig"?"auto":"none"}}>
             <div className="bg-white rounded-2xl overflow-hidden shadow-2xl" style={{width:220}}>
@@ -695,7 +679,6 @@ function DesktopLayout({
           </div>
         </div>
 
-        {/* Tagline */}
         <div className="transition-all duration-500 mt-14"
           style={{opacity:panel?0:1,transform:panel?"translateY(8px)":"translateY(0)"}}>
           <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a60] mb-4" style={{fontFamily:"var(--font-body,sans-serif)"}}>Joyería artesanal</p>
@@ -736,7 +719,6 @@ function MobileLayout({
   const [adminOpen, setAdminOpen] = useState(false);
   const scrollToCatalog = () => { catalogRef.current?.scrollIntoView({ behavior:"smooth" }); setMenuOpen(false); };
 
-  // En móvil también se puede abrir con Ctrl+H (teclado bluetooth, etc.)
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "h") { e.preventDefault(); setAdminOpen(v=>!v); }
@@ -750,7 +732,6 @@ function MobileLayout({
       {selectedProduct && <ProductModal product={selectedProduct} onClose={()=>setSelectedProduct(null)}/>}
       {adminOpen && <AdminPanel products={products} onToggleSoldOut={onToggleSoldOut} onClose={()=>setAdminOpen(false)}/>}
 
-      {/* NAVBAR MÓVIL */}
       <nav className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 py-3 bg-[#f5f1e8]/90 backdrop-blur-md border-b border-[#e0d9cc]">
         <a href="/">
           <Image src="/logo.png" alt="Aslé Joyería" width={44} height={44}/>
@@ -763,7 +744,6 @@ function MobileLayout({
         </button>
       </nav>
 
-      {/* Menú desplegable */}
       <div className={`fixed top-[57px] left-0 right-0 z-30 bg-[#f5f1e8]/95 backdrop-blur-md border-b border-[#e0d9cc] transition-all duration-300 overflow-hidden ${menuOpen?"max-h-72 py-4":"max-h-0"}`}>
         <div className="flex flex-col items-center gap-5 px-6">
           <button onClick={scrollToCatalog} className="text-xs tracking-widest uppercase text-[#1f3a5f]" style={{fontFamily:"var(--font-body,sans-serif)"}}>Catálogo</button>
@@ -781,14 +761,12 @@ function MobileLayout({
             </svg>
             Instagram
           </a>
-          {/* Acceso admin oculto en menú */}
           <button onClick={()=>{setAdminOpen(true);setMenuOpen(false);}}
             className="text-[10px] tracking-widest uppercase text-[#c8bfa8]/50 hover:text-[#8a7a60] transition-colors"
             style={{fontFamily:"var(--font-body,sans-serif)"}}>⚙</button>
         </div>
       </div>
 
-      {/* HERO MÓVIL */}
       <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-6 pt-16 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {[{s:2,x:15,y:25,d:0,dur:8},{s:2,x:80,y:15,d:1.5,dur:10},{s:3,x:85,y:70,d:0.4,dur:7},{s:2,x:20,y:75,d:2,dur:9}].map((p,i)=>(
@@ -848,10 +826,7 @@ function MobileLayout({
 // ═══════════════════════════════════════════════════════════════════════════════
 export default function Home() {
   const isMobile = useIsMobile();
-
-  // Estado de productos con sold-out mutable
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-
   const handleToggleSoldOut = useCallback((id: number) => {
     setProducts(prev => prev.map(p => p.id === id ? { ...p, soldOut: !p.soldOut } : p));
   }, []);
@@ -862,104 +837,52 @@ export default function Home() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ✏️  CONFIGURACIÓN DEL CATÁLOGO
-//     Aquí puedes cambiar precios, nombres, imágenes y marcar agotados.
-//     soldOut: true  → muestra el banner "Agotado" y desactiva compra
-//     soldOut: false → producto disponible (o simplemente omite el campo)
+// CATÁLOGO
 // ═══════════════════════════════════════════════════════════════════════════════
-
 const INITIAL_PRODUCTS: Product[] = [
 
   // ── PENDIENTES / ARETES ───────────────────────────────────────────────────────
-  // Imágenes: aretes1.jpg, aretes2.jpg, aretes3.jpg ...
-  {
-    id: 1,
-    category: "pendientes",
-    src: "/aretes1.jpg",
-    name: "Aretes gota de acero inoxidable",
-    price: "$299 MXN",
-    badge: "Popular",
-    soldOut: false,
-  },
-  {
-    id: 2,
-    category: "pendientes",
-    src: "/aretes2.jpg",
-    name: "Aretes argolla dorada",
-    price: "$350 MXN",
-    soldOut: false,
-  },
+  { id: 1,  category: "pendientes", src: "/Aretes1.jpg", name: "Aretes plateados de nudo",                                       price: "$150 MXN", soldOut: false },
+  { id: 2,  category: "pendientes", src: "/Aretes2.jpg", name: "Aretes de letra T",                                              price: "$150 MXN", soldOut: false },
+  { id: 3,  category: "pendientes", src: "/Aretes3.jpg", name: "Aretes de nudo, oro laminado",                                   price: "$150 MXN", soldOut: false },
+  { id: 4,  category: "pendientes", src: "/Aretes4.jpg", name: "Aretes de trébol azul, plata 925",                               price: "$160 MXN", soldOut: false },
+  { id: 5,  category: "pendientes", src: "/Aretes5.jpg", name: "Aretes de plata 925 en forma de trébol, color lila",             price: "$160 MXN", soldOut: false },
+  { id: 6,  category: "pendientes", src: "/Aretes6.jpg", name: "Aretes de oro laminado, con diseño de concha y estrella de mar", price: "$100 MXN", soldOut: false },
+  { id: 7,  category: "pendientes", src: "/Aretes7.jpg", name: "Aretes de plata 925, trébol color coral",                       price: "$160 MXN", soldOut: false },
+  { id: 8,  category: "pendientes", src: "/Aretes8.jpg", name: "Aretes estilo reloj de oro laminado",                           price: "$120 MXN", soldOut: false },
 
   // ── COLGANTES / COLLARES ──────────────────────────────────────────────────────
-  // Imágenes: collar1.jpg, collar2.jpg, collar3.jpg ...
-  {
-    id: 3,
-    category: "colgantes",
-    src: "/collar1.jpg",
-    name: "Collar con dije de corazón de oro laminado",
-    price: "$899 MXN",
-    badge: "Popular",
-    soldOut: false,
-  },
-  {
-    id: 4,
-    category: "colgantes",
-    src: "/collar2.jpg",
-    name: "Collar cadena fina dorada",
-    price: "$450 MXN",
-    soldOut: false,
-  },
+  { id: 9,  category: "colgantes",  src: "/Collar1.jpg", name: "Collar de oro laminado, letra G",                               price: "$160 MXN", soldOut: false },
+  { id: 10, category: "colgantes",  src: "/Collar2.jpg", name: "Collar de plata 925",                                           price: "$160 MXN", soldOut: false },
+  { id: 11, category: "colgantes",  src: "/Collar3.jpg", name: "Collar de trébol azul antiestrés (giratorio)",                  price: "$180 MXN", soldOut: false },
+  { id: 12, category: "colgantes",  src: "/Collar4.jpg", name: "Collar de acero inoxidable, doble",                             price: "$180 MXN", soldOut: false },
+  { id: 13, category: "colgantes",  src: "/Collar5.jpg", name: "Collar de oro laminado doble",                                  price: "$200 MXN", soldOut: false },
+  { id: 14, category: "colgantes",  src: "/Collar6.jpg", name: "Collar de acero inoxidable con perla de río",                   price: "$150 MXN", soldOut: false },
+  { id: 15, category: "colgantes",  src: "/Collar7.jpg", name: "Collar de cuentas de colores con broche de oro laminado",       price: "$85 MXN",  soldOut: false },
 
   // ── BRAZALETES / PULSERAS ─────────────────────────────────────────────────────
-  // Imágenes: pulsera1.jpg, pulsera2.jpg, pulsera3.jpg ...
-  {
-    id: 5,
-    category: "brazaletes",
-    src: "/pulsera1.jpg",
-    name: "Pulsera trenzada de acero inoxidable",
-    price: "$599 MXN",
-    soldOut: false,
-  },
-  {
-    id: 6,
-    category: "brazaletes",
-    src: "/pulsera2.jpg",
-    name: "Brazalete rígido dorado",
-    price: "$750 MXN",
-    soldOut: false,
-  },
+  { id: 16, category: "brazaletes", src: "/Pulsera1.jpg", name: "Pulsera de ojos turcos ajustable, oro laminado",                                    price: "$250 MXN", soldOut: false },
+  { id: 17, category: "brazaletes", src: "/Pulsera2.jpg", name: "Pulsera de oro laminado con piedras verdes",                                        price: "$250 MXN", soldOut: false },
+  { id: 18, category: "brazaletes", src: "/Pulsera3.jpg", name: "Pulsera tipo cadena de oro laminado",                                               price: "$250 MXN", soldOut: false },
+  { id: 19, category: "brazaletes", src: "/Pulsera4.jpg", name: "Pulseras de piedras con corazones de cerámica y broches de oro laminado",           price: "$100 MXN", soldOut: false },
 
   // ── ANILLOS ───────────────────────────────────────────────────────────────────
-  // Imágenes: anillo1.jpg, anillo2.jpg, anillo3.jpg ...
-  {
-    id: 7,
-    category: "anillos",
-    src: "/anillo1.jpg",
-    name: "Anillo solitario de acero inoxidable",
-    price: "$399 MXN",
-    badge: "Nuevo",
-    soldOut: false,
-  },
-  {
-    id: 8,
-    category: "anillos",
-    src: "/anillo2.jpg",
-    name: "Anillo minimalista dorado",
-    price: "$320 MXN",
-    soldOut: false,
-  },
+  { id: 20, category: "anillos",    src: "/Anillo1.jpg", name: "Anillo con estrellas de plata 925",              price: "$220 MXN", soldOut: false },
+  { id: 21, category: "anillos",    src: "/Anillo2.jpg", name: "Anillo de Londres, plata 925",                   price: "$450 MXN", soldOut: false },
+  { id: 22, category: "anillos",    src: "/Anillo3.jpg", name: "Anillo de serpiente, plata 925",                 price: "$500 MXN", soldOut: false },
+  { id: 23, category: "anillos",    src: "/Anillo4.jpg", name: "Anillo de abeja, plata 925",                     price: "$500 MXN", soldOut: false },
+  { id: 24, category: "anillos",    src: "/Anillo5.jpg", name: "Anillos de oro laminado con distintos diseños",  price: "$150 MXN", soldOut: false },
 
   // ── BOLSOS ────────────────────────────────────────────────────────────────────
-  // Imágenes: bolso1.jpg, bolso2.jpg, bolso3.jpg ...
-  {
-    id: 9,
-    category: "bolsos",
-    src: "/bolso1.jpg",
-    name: "Bolso mini de piel café",
-    price: "$1,200 MXN",
-    badge: "Nuevo",
-    soldOut: false,
-  },
+  { id: 25, category: "bolsos", src: "/Bolsa1.jpg",  name: "Bolsa color azul cielo", price: "$550 MXN", soldOut: false },
+  { id: 26, category: "bolsos", src: "/Bolsa2.jpg",  name: "Bolsa color gris",       price: "$550 MXN", soldOut: false },
+  { id: 27, category: "bolsos", src: "/Bolsa3.jpg",  name: "Bolsa color verde",      price: "$550 MXN", soldOut: false },
+  { id: 28, category: "bolsos", src: "/Bolsa4.jpg",  name: "Bolsa color caqui",      price: "$550 MXN", soldOut: false },
+  { id: 29, category: "bolsos", src: "/Bolsa5.jpg",  name: "Bolsa rosa claro",       price: "$550 MXN", soldOut: false },
+  { id: 30, category: "bolsos", src: "/Bolsa6.jpg",  name: "Bolsa color rojo",       price: "$550 MXN", soldOut: false },
+  { id: 31, category: "bolsos", src: "/Bolsa7.jpg",  name: "Bolsa amarillo claro",   price: "$550 MXN", soldOut: false },
+  { id: 32, category: "bolsos", src: "/Bolsa8.jpg",  name: "Bolsa color café",       price: "$550 MXN", soldOut: false },
+  { id: 33, category: "bolsos", src: "/Bolsa9.jpg",  name: "Bolsa color blanco",     price: "$550 MXN", soldOut: false },
+  { id: 34, category: "bolsos", src: "/Bolsa10.jpg", name: "Bolsa negra",            price: "$550 MXN", soldOut: false },
 
 ];
-
