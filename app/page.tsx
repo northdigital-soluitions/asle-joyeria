@@ -852,7 +852,7 @@ const INITIAL_PRODUCTS: Product[] = [
   { id: 8,  category: "pendientes", src: "/Aretes8.jpg", name: "Aretes estilo reloj de oro laminado",                           price: "$120 MXN", soldOut: false },
 
   // ── COLGANTES / COLLARES ──────────────────────────────────────────────────────
-  { id: 9,  category: "colgantes",  src: "/Collar1.jpg", name: "Collar de oro laminado, letra G",                               price: "$160 MXN", soldOut: false },
+  { id: 9,  category: "colgantes",  src: "/CollarA.jpg", name: "Collar de oro laminado, letra G",                               price: "$160 MXN", soldOut: false },
   { id: 10, category: "colgantes",  src: "/Collar2.jpg", name: "Collar de plata 925",                                           price: "$160 MXN", soldOut: false },
   { id: 11, category: "colgantes",  src: "/Collar3.jpg", name: "Collar de trébol azul antiestrés (giratorio)",                  price: "$180 MXN", soldOut: false },
   { id: 12, category: "colgantes",  src: "/Collar4.jpg", name: "Collar de acero inoxidable, doble",                             price: "$180 MXN", soldOut: false },
