@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -16,7 +17,7 @@ function useIsMobile() {
 }
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────────
-type Category = "pendientes" | "colgantes" | "brazaletes" | "bolsos";
+type Category = "pendientes" | "colgantes" | "brazaletes" | "bolsos" | "anillos";
 
 interface Product {
   id: number;
@@ -76,10 +77,11 @@ function AdminPanel({
     pendientes: "Pendientes",
     colgantes: "Colgantes",
     brazaletes: "Brazaletes",
+    anillos: "Anillos",
     bolsos: "Bolsos",
   };
 
-  const categories: Category[] = ["pendientes", "colgantes", "brazaletes", "bolsos"];
+  const categories: Category[] = ["pendientes", "colgantes", "brazaletes", "anillos", "bolsos"];
 
   return (
     <div
@@ -457,8 +459,9 @@ const CAT_LABELS: Record<Category, string> = {
   colgantes:   "Colgantes",
   brazaletes:  "Brazaletes",
   bolsos:      "Bolsos",
+  anillos:     "Anillos",
 };
-const CAT_ORDER: Category[] = ["pendientes", "colgantes", "brazaletes", "bolsos"];
+const CAT_ORDER: Category[] = ["pendientes", "colgantes", "brazaletes", "anillos", "bolsos"];
 
 function CatalogSection({
   catalogRef,
@@ -867,59 +870,91 @@ export default function Home() {
 
 const INITIAL_PRODUCTS: Product[] = [
 
-  // ── PENDIENTES ────────────────────────────────────────────────────────────────
+  // ── PENDIENTES / ARETES ───────────────────────────────────────────────────────
+  // Imágenes: aretes1.jpg, aretes2.jpg, aretes3.jpg ...
   {
     id: 1,
     category: "pendientes",
-    src: "/joya1.jpg",               // ← nombre de imagen en /public
-    name: "Collar con dije de corazón de oro laminado",
-    price: "$899 MXN",
+    src: "/aretes1.jpg",
+    name: "Aretes gota de acero inoxidable",
+    price: "$299 MXN",
     badge: "Popular",
     soldOut: false,
   },
   {
     id: 2,
     category: "pendientes",
-    src: "/joya2.jpg",
-    name: "Aretes gota de acero inoxidable",
-    price: "$299 MXN",
+    src: "/aretes2.jpg",
+    name: "Aretes argolla dorada",
+    price: "$350 MXN",
     soldOut: false,
   },
 
-  // ── COLGANTES ─────────────────────────────────────────────────────────────────
+  // ── COLGANTES / COLLARES ──────────────────────────────────────────────────────
+  // Imágenes: collar1.jpg, collar2.jpg, collar3.jpg ...
   {
     id: 3,
     category: "colgantes",
-    src: "/joya3.jpg",
-    name: "Colgante luna de plata 925",
+    src: "/collar1.jpg",
+    name: "Collar con dije de corazón de oro laminado",
+    price: "$899 MXN",
+    badge: "Popular",
+    soldOut: false,
+  },
+  {
+    id: 4,
+    category: "colgantes",
+    src: "/collar2.jpg",
+    name: "Collar cadena fina dorada",
     price: "$450 MXN",
-    badge: "Nuevo",
     soldOut: false,
   },
 
-  // ── BRAZALETES ────────────────────────────────────────────────────────────────
+  // ── BRAZALETES / PULSERAS ─────────────────────────────────────────────────────
+  // Imágenes: pulsera1.jpg, pulsera2.jpg, pulsera3.jpg ...
   {
-    id: 4,
+    id: 5,
     category: "brazaletes",
-    src: "/brazalete_1.jpg",         // ← usa tu convención de nombres
+    src: "/pulsera1.jpg",
     name: "Pulsera trenzada de acero inoxidable",
     price: "$599 MXN",
     soldOut: false,
   },
   {
-    id: 5,
+    id: 6,
     category: "brazaletes",
-    src: "/brazalete_2.jpg",
+    src: "/pulsera2.jpg",
     name: "Brazalete rígido dorado",
     price: "$750 MXN",
     soldOut: false,
   },
 
-  // ── BOLSOS ────────────────────────────────────────────────────────────────────
+  // ── ANILLOS ───────────────────────────────────────────────────────────────────
+  // Imágenes: anillo1.jpg, anillo2.jpg, anillo3.jpg ...
   {
-    id: 6,
+    id: 7,
+    category: "anillos",
+    src: "/anillo1.jpg",
+    name: "Anillo solitario de acero inoxidable",
+    price: "$399 MXN",
+    badge: "Nuevo",
+    soldOut: false,
+  },
+  {
+    id: 8,
+    category: "anillos",
+    src: "/anillo2.jpg",
+    name: "Anillo minimalista dorado",
+    price: "$320 MXN",
+    soldOut: false,
+  },
+
+  // ── BOLSOS ────────────────────────────────────────────────────────────────────
+  // Imágenes: bolso1.jpg, bolso2.jpg, bolso3.jpg ...
+  {
+    id: 9,
     category: "bolsos",
-    src: "/bolso_1.jpg",
+    src: "/bolso1.jpg",
     name: "Bolso mini de piel café",
     price: "$1,200 MXN",
     badge: "Nuevo",
@@ -927,3 +962,4 @@ const INITIAL_PRODUCTS: Product[] = [
   },
 
 ];
+
