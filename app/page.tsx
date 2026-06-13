@@ -108,7 +108,6 @@ function AdminPanel({
                         <div key={p.id} className="flex items-center justify-between py-3 px-3 rounded-xl hover:bg-white/5 transition-colors gap-3">
                           <div className="flex items-center gap-3 min-w-0">
                             <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-[#ede9df] flex-shrink-0">
-                              {/* ── unoptimized #1 ── */}
                               <Image src={p.src} alt={p.name} fill className="object-cover" unoptimized
                                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}/>
                             </div>
@@ -190,7 +189,6 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
         style={{ transform: mounted ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)", opacity: mounted ? 1 : 0, transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease" }}
         className="bg-[#faf8f4] rounded-3xl overflow-hidden max-w-sm w-full shadow-2xl">
         <div className="relative w-full aspect-square bg-[#ede9df] overflow-hidden">
-          {/* ── unoptimized #2 ── */}
           <Image src={product.src} alt={product.name} fill className="object-cover" sizes="400px" unoptimized
             onError={e=>{(e.currentTarget as HTMLImageElement).style.display="none";}}/>
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"/>
@@ -225,26 +223,29 @@ function ProductModal({ product, onClose }: { product: Product; onClose: () => v
   );
 }
 
-function ProductCard({ product, onDetail }: { product: Product; onDetail: () => void }) {
+function ProductCard({ product, onDetail, index }: { product: Product; onDetail: () => void; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold:0.15 });
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold:0.1 });
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
 
   return (
     <div ref={ref} onClick={onDetail}
-      className={`group relative bg-[#faf8f4] rounded-3xl overflow-hidden shadow-sm transition-all duration-500 cursor-pointer ${product.soldOut ? "opacity-70" : "hover:shadow-2xl hover:-translate-y-2"}`}
-      style={{ opacity:visible?1:0, transform:visible?"translateY(0)":"translateY(32px)", transition:`opacity 0.6s ease ${product.id*80}ms, transform 0.6s cubic-bezier(0.34,1.2,0.64,1) ${product.id*80}ms, box-shadow 0.3s ease` }}>
+      className={`group relative bg-[#faf8f4] rounded-3xl overflow-hidden shadow-sm cursor-pointer w-full ${product.soldOut ? "opacity-70" : "hover:shadow-2xl hover:-translate-y-2"}`}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: `opacity 0.55s ease ${index * 60}ms, transform 0.55s cubic-bezier(0.34,1.2,0.64,1) ${index * 60}ms, box-shadow 0.3s ease, translate 0.3s ease`,
+      }}>
       {product.soldOut ? (
         <span className="absolute top-4 left-4 z-10 bg-[#c0392b] text-white text-xs px-3 py-1 rounded-full tracking-wider uppercase" style={{fontFamily:"var(--font-body,sans-serif)"}}>Agotado</span>
       ) : product.badge ? (
         <span className="absolute top-4 left-4 z-10 bg-[#1f3a5f] text-white text-xs px-3 py-1 rounded-full tracking-wider uppercase" style={{fontFamily:"var(--font-body,sans-serif)"}}>{product.badge}</span>
       ) : null}
       <div className="relative w-full aspect-square overflow-hidden bg-[#ede9df]">
-        {/* ── unoptimized #3 ── */}
         <Image src={product.src} alt={product.name} fill unoptimized
           className={`object-cover transition-transform duration-700 ease-out ${!product.soldOut ? "group-hover:scale-105" : ""}`}
           sizes="(max-width:768px) 100vw, 33vw"
@@ -331,10 +332,46 @@ const CAT_LABELS: Record<Category, string> = {
 };
 const CAT_ORDER: Category[] = ["pendientes", "colgantes", "brazaletes", "anillos", "bolsos"];
 
+// Grid centrado: flex-wrap con tarjetas de ancho fijo → el último queda centrado automáticamente
+function ProductGrid({ products, onDetail }: { products: Product[]; onDetail: (p: Product) => void }) {
+  return (
+    <div className="flex flex-wrap justify-center gap-8">
+      {products.map((p, i) => (
+        <div key={p.id} style={{ width: "calc(33.333% - 22px)", minWidth: 220 }}>
+          <ProductCard product={p} onDetail={() => onDetail(p)} index={i} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProductGridMobile({ products, onDetail }: { products: Product[]; onDetail: (p: Product) => void }) {
+  return (
+    <div className="flex flex-col gap-6">
+      {products.map((p, i) => (
+        <ProductCard key={p.id} product={p} onDetail={() => onDetail(p)} index={i} />
+      ))}
+    </div>
+  );
+}
+
 function CatalogSection({ catalogRef, products, onDetail }: { catalogRef: React.RefObject<HTMLElement | null>; products: Product[]; onDetail: (p: Product) => void }) {
   const availableCats = CAT_ORDER.filter(c => products.some(p => p.category === c));
   const [activeTab, setActiveTab] = useState<Category>(availableCats[0] ?? "pendientes");
-  const filtered = products.filter(p => p.category === activeTab);
+  const [displayedTab, setDisplayedTab] = useState<Category>(availableCats[0] ?? "pendientes");
+  const [fading, setFading] = useState(false);
+
+  const handleTabChange = (cat: Category) => {
+    if (cat === activeTab) return;
+    setFading(true);
+    setTimeout(() => {
+      setDisplayedTab(cat);
+      setActiveTab(cat);
+      setFading(false);
+    }, 200);
+  };
+
+  const filtered = products.filter(p => p.category === displayedTab);
 
   return (
     <section ref={catalogRef} className="py-24 px-6 bg-[#f5f1e8]">
@@ -343,24 +380,24 @@ function CatalogSection({ catalogRef, products, onDetail }: { catalogRef: React.
         <h2 className="text-center text-4xl text-[#1f3a5f] mb-10" style={{fontFamily:"var(--font-display,serif)",fontWeight:600}}>Catálogo</h2>
         <div className="flex justify-center gap-2 mb-12 flex-wrap">
           {availableCats.map(cat => (
-            <button key={cat} onClick={() => setActiveTab(cat)}
-              className={`px-5 py-2 rounded-full text-xs tracking-widest uppercase transition-all duration-300 ${activeTab === cat ? "bg-[#1f3a5f] text-white shadow-lg shadow-[#1f3a5f]/20" : "border border-[#1f3a5f]/30 text-[#1f3a5f] hover:border-[#1f3a5f] hover:bg-[#1f3a5f]/5"}`}
+            <button key={cat} onClick={() => handleTabChange(cat)}
+              className={`px-5 py-2 rounded-full text-xs tracking-widest uppercase transition-all duration-300 ${activeTab === cat ? "bg-[#1f3a5f] text-white shadow-lg shadow-[#1f3a5f]/20 scale-105" : "border border-[#1f3a5f]/30 text-[#1f3a5f] hover:border-[#1f3a5f] hover:bg-[#1f3a5f]/5"}`}
               style={{fontFamily:"var(--font-body,sans-serif)",fontWeight:500}}>
               {CAT_LABELS[cat]}
               <span className={`ml-2 text-[10px] ${activeTab===cat ? "text-[#d4c9a8]" : "text-[#8a7a60]"}`}>({products.filter(p=>p.category===cat).length})</span>
             </button>
           ))}
         </div>
-        {filtered.length > 0 ? (
-          <div className="grid grid-cols-3 gap-8">
-            {filtered.map(p=><ProductCard key={p.id} product={p} onDetail={()=>onDetail(p)}/>)}
-          </div>
-        ) : (
-          <div className="text-center py-20 text-[#8a7a60]" style={{fontFamily:"var(--font-body,sans-serif)"}}>
-            <p className="text-4xl mb-4 opacity-30">◈</p>
-            <p className="text-sm tracking-widest uppercase">Próximamente piezas en esta categoría</p>
-          </div>
-        )}
+        <div style={{ opacity: fading ? 0 : 1, transform: fading ? "translateY(8px)" : "translateY(0)", transition: "opacity 0.2s ease, transform 0.2s ease" }}>
+          {filtered.length > 0 ? (
+            <ProductGrid products={filtered} onDetail={onDetail} />
+          ) : (
+            <div className="text-center py-20 text-[#8a7a60]" style={{fontFamily:"var(--font-body,sans-serif)"}}>
+              <p className="text-4xl mb-4 opacity-30">◈</p>
+              <p className="text-sm tracking-widest uppercase">Próximamente piezas en esta categoría</p>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -369,7 +406,20 @@ function CatalogSection({ catalogRef, products, onDetail }: { catalogRef: React.
 function CatalogSectionMobile({ catalogRef, products, onDetail }: { catalogRef: React.RefObject<HTMLElement | null>; products: Product[]; onDetail: (p: Product) => void }) {
   const availableCats = CAT_ORDER.filter(c => products.some(p => p.category === c));
   const [activeTab, setActiveTab] = useState<Category>(availableCats[0] ?? "pendientes");
-  const filtered = products.filter(p => p.category === activeTab);
+  const [displayedTab, setDisplayedTab] = useState<Category>(availableCats[0] ?? "pendientes");
+  const [fading, setFading] = useState(false);
+
+  const handleTabChange = (cat: Category) => {
+    if (cat === activeTab) return;
+    setFading(true);
+    setTimeout(() => {
+      setDisplayedTab(cat);
+      setActiveTab(cat);
+      setFading(false);
+    }, 200);
+  };
+
+  const filtered = products.filter(p => p.category === displayedTab);
 
   return (
     <section ref={catalogRef} className="py-16 px-4 bg-[#f5f1e8]">
@@ -378,22 +428,22 @@ function CatalogSectionMobile({ catalogRef, products, onDetail }: { catalogRef: 
         <h2 className="text-center text-3xl text-[#1f3a5f] mb-8" style={{fontFamily:"var(--font-display,serif)",fontWeight:600}}>Catálogo</h2>
         <div className="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
           {availableCats.map(cat => (
-            <button key={cat} onClick={()=>setActiveTab(cat)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-xs tracking-widest uppercase transition-all duration-300 ${activeTab===cat ? "bg-[#1f3a5f] text-white" : "border border-[#1f3a5f]/30 text-[#1f3a5f]"}`}
+            <button key={cat} onClick={() => handleTabChange(cat)}
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-xs tracking-widest uppercase transition-all duration-300 ${activeTab===cat ? "bg-[#1f3a5f] text-white scale-105" : "border border-[#1f3a5f]/30 text-[#1f3a5f]"}`}
               style={{fontFamily:"var(--font-body,sans-serif)",fontWeight:500}}>
               {CAT_LABELS[cat]}
             </button>
           ))}
         </div>
-        <div className="flex flex-col gap-6">
-          {filtered.map(p=><ProductCard key={p.id} product={p} onDetail={()=>onDetail(p)}/>)}
+        <div style={{ opacity: fading ? 0 : 1, transform: fading ? "translateY(8px)" : "translateY(0)", transition: "opacity 0.2s ease, transform 0.2s ease" }}>
+          <ProductGridMobile products={filtered} onDetail={onDetail} />
+          {filtered.length === 0 && (
+            <div className="text-center py-16 text-[#8a7a60]" style={{fontFamily:"var(--font-body,sans-serif)"}}>
+              <p className="text-3xl mb-3 opacity-30">◈</p>
+              <p className="text-xs tracking-widest uppercase">Próximamente</p>
+            </div>
+          )}
         </div>
-        {filtered.length === 0 && (
-          <div className="text-center py-16 text-[#8a7a60]" style={{fontFamily:"var(--font-body,sans-serif)"}}>
-            <p className="text-3xl mb-3 opacity-30">◈</p>
-            <p className="text-xs tracking-widest uppercase">Próximamente</p>
-          </div>
-        )}
       </div>
     </section>
   );
